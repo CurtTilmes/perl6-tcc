@@ -2,7 +2,7 @@
 
 See [eg/testit.pl6](eg/testit.pl6)
 
-```
+```perl6
 use v6;
 use TCC;
 
