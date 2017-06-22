@@ -54,7 +54,7 @@ class TCC is repr('CPointer')
         nativecast($sig, (tcc_get_symbol(self, $name) // fail "No $name"))
     }
 
-    multi method bind(Str $name, Mu:U $type) is rw
+    multi method bind(Str $name, Mu:U $type, &store-func?) is rw
     {
         Proxy.new:
 	    FETCH => -> $
@@ -64,7 +64,8 @@ class TCC is repr('CPointer')
             },
             STORE => -> $, $new
 	    {
-	        die "Sorry, can't write $new into $name yet"
+	        die "No store function defined for $name" unless &store-func;
+	        store-func($new)
             };
     }
 

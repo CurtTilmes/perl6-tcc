@@ -43,7 +43,7 @@ $tcc.relocate;
 my &fib   := $tcc.bind('fib', :(int32 --> int32));
 my &foo   := $tcc.bind('foo', :(int32 --> int32));
 my &set_x := $tcc.bind('set_x', :(int32));
-my $x     := $tcc.bind('x', int32);
+my $x     := $tcc.bind('x', int32, &set_x);
 
 say fib(12);
 
@@ -55,4 +55,6 @@ set_x(12345);
 
 say $x;
 
-# $x = 123;  # Can't do this
+$x = 752;
+
+say $x;
