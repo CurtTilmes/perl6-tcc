@@ -1,15 +1,105 @@
 # Perl 6 bindings for TCC
 
-See eg/testit.pl6
+See [eg/testit.pl6](eg/testit.pl6)
 
+```
+use v6;
+use TCC;
 
-add-symbol is currently broken.  It is hardcoded so the only type of
-signature you can use is a function which takes two integers and
-returns an integer (so the example works!)
+# Make a new Tiny C Compiler
+my $tcc = TCC.new;
+
+# Compile a C program into memory
+$tcc.compile:
+'
+    #include <stdio.h>
+    int add(int a, int b);  /* declare perl functions to quiet warnings */
+    void print_something(char *my_string);
+
+    int x = 7;
+
+    int fib(int n)
+    {
+        if (n <= 2)
+            return 1;
+        else
+            return fib(n-1) + fib(n-2);
+    }
+
+    int foo(int n)
+    {
+        printf("Hello World!\n");
+        printf("fib(%d) = %d\n", n, fib(n));
+        printf("add(%d, %d) = %d\n", n, 2 * n, add(n, 2 * n));
+
+        print_something("this is just a test");
+
+        return 0;
+    }
+
+    int set_x(int n)
+    {
+        x = n;
+    }
+';
+
+# These are just perl subs for C to call
+sub add(int32 $a, int32 $b --> int32)
+{
+    return $a + $b;
+}
+
+# This one gets renamed to 'print_something' for C
+sub print-something(Str $my-string)
+{
+    say $my-string;
+}
+
+# Add some perl subs for C to call
+$tcc.add-symbol(&add);
+$tcc.add-symbol(&print-something, name => 'print_something');
+
+# You just have to do this, so do it.
+$tcc.relocate;
+
+# Bind C functions to perl callable variables, must pass in signature
+my &fib   := $tcc.bind('fib', :(int32 --> int32));
+my &foo   := $tcc.bind('foo', :(int32 --> int32));
+my &set_x := $tcc.bind('set_x', :(int32 --> int32));
+
+# Bind Perl variable to C symbol, pass in type and an optional function
+# to set the variable if you want to go both ways
+my $x     := $tcc.bind('x', int32, &set_x);
+
+# Once everything is compiled and bound, just work in Perl land like normal:
+
+say fib(12);
+
+foo(17);
+
+say $x;
+
+set_x(12345);
+
+say $x;
+
+$x = 752;
+
+say $x;
+```
+
+Output:
+```
+144
+Hello World!
+fib(17) = 1597
+add(17, 34) = 51
+this is just a test
+7
+12345
+752
+```
 
 For now you have to manually write a store function if you want
 two-way variable binding.  Could probably do this automatically.
 
-Check out
-[NativeCall](https://github.com/rakudo/rakudo/blob/nom/lib/NativeCall.pm6)
-It has everything you need to do this right.
