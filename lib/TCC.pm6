@@ -1,5 +1,6 @@
 use v6;
 
+use nqp;
 use NativeCall;
 
 constant LIB = 'tcc';
@@ -46,17 +47,26 @@ class TCC is repr('CPointer')
         tcc_add_symbol(self, &callback.name, &callback);
     }
 
-    method bind(Str $name, Signature $sig)
+    method relocate { tcc_relocate(self, TCC_RELOCATE_AUTO) }
+
+    multi method bind(Str $name, Signature $sig)
     {
-        state $relocated = 0;
-
-        tcc_relocate(self, TCC_RELOCATE_AUTO) unless $relocated++;
-
-        my $fptr = tcc_get_symbol(self, $name)
-            or die "Couldn't find $name";
-
-        nativecast($sig, $fptr);
+        nativecast($sig, (tcc_get_symbol(self, $name) // fail "No $name"))
     }
 
-    method DESTROY() { tcc_delete(self) }
+    multi method bind(Str $name, Mu:U $type) is rw
+    {
+        Proxy.new:
+	    FETCH => -> $
+	    {
+                nativecast($type,
+                           (tcc_get_symbol(self, $name) // fail "No $name"))
+            },
+            STORE => -> $, $new
+	    {
+	        die "Sorry, can't write $new into $name yet"
+            };
+    }
+
+    submethod DESTROY() { tcc_delete(self) }
 }
