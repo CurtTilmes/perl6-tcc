@@ -1,6 +1,7 @@
+use v6;
 use TCC;
 
-# Make a new Tiny  C Compiler
+# Make a new Tiny C Compiler
 my $tcc = TCC.new;
 
 # Compile a C program into memory
