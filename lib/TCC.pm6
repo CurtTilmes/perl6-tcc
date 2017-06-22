@@ -31,29 +31,27 @@ class TCC is repr('CPointer')
 
     method compile(Str $code)
     {
-        if tcc_compile_string(self, $code) == -1
-        {
-            die "Failed to compile [$code]";
-        }
+        tcc_compile_string(self, $code) == -1
+            and die "Failed to compile [$code]";
     }
 
     method add-symbol(&callback, :$name = &callback.name)
     {
         # Start with basic signature
-        my $sig = :(TCC, Str, &cb --> int32);
+        my $sig := :(TCC, Str, &cb --> int32);
 
         # Replace &cb sub-signature with calling signature from callback.
         nqp::bindattr($sig.params[2], Parameter, '$!sub_signature',
-                      nqp::decont(&callback.signature));
+                      &callback.signature);
 
         # Construct the NativeCall subroutine to add the symbol
-        my $tcc_add_symbol := sub {};
-        &trait_mod:<is>($tcc_add_symbol, native => LIB);
-        &trait_mod:<is>($tcc_add_symbol, symbol => 'tcc_add_symbol');
-        nqp::bindattr($tcc_add_symbol, Code, '$!signature', nqp::decont($sig));
+        my &tcc_add_symbol := sub {};
+        &trait_mod:<is>(&tcc_add_symbol, native => LIB);
+        &trait_mod:<is>(&tcc_add_symbol, symbol => 'tcc_add_symbol');
+        nqp::bindattr(&tcc_add_symbol, Code, '$!signature', $sig);
 
         # Add the symbol
-        $tcc_add_symbol(self, $name, &callback);
+        tcc_add_symbol(self, $name, &callback);
     }
 
     method relocate { tcc_relocate(self, TCC_RELOCATE_AUTO) }
