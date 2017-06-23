@@ -1,4 +1,4 @@
-# Perl 6 bindings for TCC
+# Perl 6 bindings for TCC, the Tiny C Compiler
 
 [![Build Status](https://travis-ci.org/CurtTilmes/perl6-tcc.svg)](https://travis-ci.org/CurtTilmes/perl6-tcc)
 
