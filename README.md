@@ -1,5 +1,22 @@
 # Perl 6 bindings for TCC
 
+# Installation
+
+You have to build [tcc](https://bellard.org/tcc/), the Tiny C Compiler
+by hand since it doesn't install the shared library by default, and
+most distributions don't include it.
+
+```
+git clone https://github.com/run4flat/tinycc.git
+cd tinycc
+./configure
+make libtcc.so   # Have to do this first to compile with PIC for shared
+make
+make install
+cp libtcc.so /usr/local/lib # or somewhere convenient
+```
+
+# Synopsis
 See [eg/testit.pl6](eg/testit.pl6)
 
 ```perl6
@@ -102,10 +119,14 @@ this is just a test
 752
 ```
 
-For now you have to manually write a store function if you want
-two-way variable binding.  Could probably do this automatically.
 
+# NOTES
 
+* Some assumptions on 64-bit architecture, but everyone has that
+  anyway, right?
+
+* For now you have to manually write a store function if you want
+  two-way variable binding.  Could probably do this automatically.
 
 # SEE ALSO
 
