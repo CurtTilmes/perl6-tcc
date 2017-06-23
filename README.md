@@ -1,5 +1,7 @@
 # Perl 6 bindings for TCC
 
+[![Build Status](https://travis-ci.org/CurtTilmes/perl6-tcc.svg)](https://travis-ci.org/CurtTilmes/perl6-tcc)
+
 # Description
 
 TCC provides Perl 6 bindings for [tcc](https://bellard.org/tcc/), the
