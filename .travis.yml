@@ -1,0 +1,23 @@
+language: perl6
+
+os:
+  - linux
+
+perl6:
+  - latest
+
+sudo: true
+
+before_script:
+  - sudo apt-get install texinfo
+  - git clone https://github.com/run4flat/tinycc.git
+  - cd tinycc
+  - ./configure
+  - make libtcc.so
+  - make
+  - sudo make install
+  - sudo cp libtcc.so /usr/local/lib
+
+install:
+  - rakudo build zef
+  - zef install .

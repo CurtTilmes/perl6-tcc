@@ -1,5 +1,17 @@
 # Perl 6 bindings for TCC
 
+# Description
+
+TCC provides Perl 6 bindings for [tcc](https://bellard.org/tcc/), the
+Tiny C Compiler, an extremely fast C compiler that can compile C code
+directly into a memory block that is then callable by Perl.  You can
+also expose your perl functions to C which can call them, and pass
+data back and forth.
+
+The interface between Perl and C makes extensive use of the Perl 6
+[NativeCall](https://docs.perl6.org/language/nativecall) capabilities,
+and is subject to the types and other restrictions.
+
 # Installation
 
 You have to build [tcc](https://bellard.org/tcc/), the Tiny C Compiler
@@ -12,8 +24,8 @@ cd tinycc
 ./configure
 make libtcc.so   # Have to do this first to compile with PIC for shared
 make
-make install
-cp libtcc.so /usr/local/lib # or somewhere convenient
+sudo make install
+sudo cp libtcc.so /usr/local/lib # or somewhere convenient
 ```
 
 # Synopsis
@@ -127,6 +139,16 @@ this is just a test
 
 * For now you have to manually write a store function if you want
   two-way variable binding.  Could probably do this automatically.
+
+* The Tiny C Compiler also includes an assembler, so if even C is too
+  slow for you, you can even embed x86 assembly language into your
+  critical portions for super speed!
+
+# Acknowledgements
+
+Developed after presentation and discussion with David Mertens about
+the Perl 5 module [C::Blocks](https://metacpan.org/pod/C::Blocks) and
+how one might approach that in Perl 6.
 
 # SEE ALSO
 
