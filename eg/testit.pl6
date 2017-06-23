@@ -2,7 +2,7 @@ use v6;
 use TCC;
 
 # Make a new Tiny C Compiler
-my $tcc = TCC.new;
+my $tcc = TCC.new('-I/usr/local/include -L/usr/local/lib -DDEBUG=0');
 
 # Compile a C program into memory
 $tcc.compile:
@@ -28,6 +28,8 @@ $tcc.compile:
         printf("add(%d, %d) = %d\n", n, 2 * n, add(n, 2 * n));
 
         print_something("this is just a test");
+
+        if (DEBUG) { print_something("debug is on"); }
 
         return 0;
     }

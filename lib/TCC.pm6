@@ -12,6 +12,8 @@ class TCC is repr('CPointer')
 {
     sub tcc_new() returns TCC is native(LIB) {...}
 
+    sub tcc_set_options(TCC, Str) returns int32 is native(LIB) {...}
+
     sub tcc_delete(TCC) is native(LIB) {...}
 
     sub tcc_set_output_type(TCC, int32) returns int32 is native(LIB) {...}
@@ -22,10 +24,15 @@ class TCC is repr('CPointer')
 
     sub tcc_get_symbol(TCC, Str) returns Pointer is native(LIB) {...}
 
-    method new()
+    method new($compile-options)
     {
         my $self = tcc_new;
+
+        tcc_set_options($self, $compile-options) == -1
+            and die "Bad TCC options [$compile-options]";
+
         tcc_set_output_type($self, TCC_OUTPUT_MEMORY);
+
         $self
     }
 
