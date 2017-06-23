@@ -105,3 +105,13 @@ this is just a test
 For now you have to manually write a store function if you want
 two-way variable binding.  Could probably do this automatically.
 
+
+
+# SEE ALSO
+
+[Inline](https://github.com/FROGGS/p6-Inline-C)
+
+`Inline::C` uses a slower C compiler, and goes to temp files on disk
+for compiling and library linking but should generate more optimized
+code.  It also doesn't seem to have as nice an interface for
+interacting back and forth with perl.
