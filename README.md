@@ -137,12 +137,14 @@ this is just a test
 * Some assumptions on 64-bit architecture, but everyone has that
   anyway, right?
 
+* Not really set up for Windows yet -- patches welcome!
+
 * For now you have to manually write a store function if you want
   two-way variable binding.  Could probably do this automatically.
 
 * The Tiny C Compiler also includes an assembler, so if even C is too
-  slow for you, you can even embed x86 assembly language into your
-  critical portions for super speed!
+  slow for you, you can embed x86 assembly language into your critical
+  portions for super speed!
 
 # Acknowledgements
 

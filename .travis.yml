@@ -19,5 +19,5 @@ before_script:
   - sudo cp libtcc.so /usr/local/lib
 
 install:
-  - rakudo build zef
+  - rakudobrew build zef
   - zef install .
