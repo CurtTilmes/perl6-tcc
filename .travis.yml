@@ -8,7 +8,7 @@ perl6:
 
 sudo: true
 
-before_script:
+install:
   - sudo apt-get install texinfo
   - git clone https://github.com/run4flat/tinycc.git
   - cd tinycc
@@ -17,7 +17,5 @@ before_script:
   - make
   - sudo make install
   - sudo cp libtcc.so /usr/local/lib
-
-install:
   - rakudobrew build zef
   - zef install .
