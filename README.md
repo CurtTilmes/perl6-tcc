@@ -10,7 +10,7 @@ data back and forth.
 
 The interface between Perl and C makes extensive use of the Perl 6
 [NativeCall](https://docs.perl6.org/language/nativecall) capabilities,
-and is subject to the types and other restrictions.
+and is subject to its types and other restrictions.
 
 # Installation
 
